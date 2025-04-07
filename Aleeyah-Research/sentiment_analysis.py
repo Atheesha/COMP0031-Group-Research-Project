@@ -2,37 +2,45 @@
 """
 sentiment_analysis.py
 
-This module calculates the sentiment of a phrase using NLTK's VADER SentimentIntensityAnalyzer.
-It provides the `analyze_phrase` function which returns a dictionary of sentiment scores.
+This script calculates the sentiment of an input phrase using NLTK's VADER SentimentIntensityAnalyzer.
+If run as a script, it will prompt the user for a phrase or accept command-line arguments.
 """
 
+import sys
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 
-# Ensure the VADER lexicon is downloaded
+# Download the VADER lexicon if not already available (quietly)
 nltk.download('vader_lexicon', quiet=True)
-
-# Create a global instance of the sentiment analyzer
-sia = SentimentIntensityAnalyzer()
 
 def analyze_phrase(phrase: str) -> dict:
     """
     Analyze the sentiment of a phrase using VADER.
-    
-    Parameters:
-        phrase (str): The phrase to analyze.
-        
-    Returns:
-        dict: A dictionary with sentiment scores (e.g., 'neg', 'neu', 'pos', 'compound').
-    """
-    return sia.polarity_scores(phrase)
 
-if __name__ == "__main__":
-    import sys
-    # If run directly, use command-line arguments or prompt for input.
+    Parameters:
+        phrase (str): The input phrase.
+
+    Returns:
+        dict: A dictionary with sentiment scores (negative, neutral, positive, compound).
+    """
+    sia = SentimentIntensityAnalyzer()
+    scores = sia.polarity_scores(phrase)
+    return scores
+
+def main():
+    # Check for a phrase passed via command-line arguments; otherwise, prompt the user.
     if len(sys.argv) > 1:
         phrase = " ".join(sys.argv[1:])
     else:
         phrase = input("Enter a phrase to analyze its sentiment: ")
+
+    # Calculate sentiment scores for the given phrase.
     scores = analyze_phrase(phrase)
-    print("Sentiment scores:", scores)
+
+    # Print the results.
+    print("\nSentiment Analysis Results:")
+    for k, v in scores.items():
+        print(f"{k.capitalize()}: {v}")
+
+if __name__ == "__main__":
+    main()

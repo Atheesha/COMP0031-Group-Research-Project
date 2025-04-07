@@ -109,12 +109,12 @@ def create_sentiment_violin_plots(sentiment_results: dict):
     ax.set_xticklabels(valid_subreddits, rotation=45, ha='right')
     ax.set_xlabel('Subreddit', fontweight='bold')
     ax.set_ylabel('Compound Sentiment Score', fontweight='bold')
-    ax.set_title('Violin Plots of Compound Sentiment Scores\n(Censored vs. Uncensored Comments)', fontweight='bold')
+    ax.set_title('Violin Plots of Compound Sentiment Scores\n(Sensitive vs. Normal Comments)', fontweight='bold')
     ax.grid(True, linestyle='--', alpha=0.7)
     
     # Add legend
-    cens_patch = mpatches.Patch(color='blue', label='Censored')
-    uncens_patch = mpatches.Patch(color='orange', label='Uncensored')
+    cens_patch = mpatches.Patch(color='blue', label='Sensitive')
+    uncens_patch = mpatches.Patch(color='orange', label='Normal')
     ax.legend(handles=[cens_patch, uncens_patch], title='Group')
     
     os.makedirs('visualizations', exist_ok=True)
