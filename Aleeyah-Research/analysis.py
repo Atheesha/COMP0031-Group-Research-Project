@@ -9,10 +9,16 @@ from sentiment_analysis import analyze_phrase  # Import the sentiment analysis f
 df = pd.read_csv("comments.csv", low_memory=False)
 df['body'] = df['body'].astype(str).str.strip()
 
-# Flag censored comments (TW/CW/NSFW markers)
+# Enhanced pattern:
+# - Word boundaries for TW, CW, NSFW (case-insensitive)
+# - Allow bold (**TW**), hidden (e.g., >!TW!<), or plain
+pattern = r'(\*\*(TW|CW|NSFW)\*\*|\>\!(TW|CW|NSFW)\!\<|\b(TW|CW|NSFW)\b)'
+
+# Flag censored comments
 df['is_censored'] = df['body'].str.contains(
-    r'\b(?:TW|CW|NSFW)\b', 
-    case=False, 
+    pattern,
+    case=False,
+    regex=True,
     na=False
 )
 
